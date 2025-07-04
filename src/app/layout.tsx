@@ -1,7 +1,5 @@
-// app/login/layout.tsx
 import React from 'react'
 import { QueryProvider } from '@/components/QueryProvider' 
-import SideBar from '@/components/SideBar' 
 import './globals.css'
 export const metadata = {
   title: 'Login',
@@ -17,10 +15,7 @@ export default function LoginLayout({
     <html lang="id">
       <body>
         <QueryProvider>
-          <div className="flex">
-            <SideBar />
-            <div className="flex-1">{children}</div>
-          </div>
+          {children}
         </QueryProvider>
       </body>
     </html>
