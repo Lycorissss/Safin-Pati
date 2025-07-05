@@ -1,5 +1,4 @@
 import React from 'react'
-import { QueryProvider } from '@/components/QueryProvider' 
 import './globals.css'
 export const metadata = {
   title: 'Login',
@@ -14,9 +13,7 @@ export default function LoginLayout({
   return (
     <html lang="id">
       <body>
-        <QueryProvider>
           {children}
-        </QueryProvider>
       </body>
     </html>
   )
