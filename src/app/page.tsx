@@ -345,10 +345,6 @@ Snack: Greek yogurt + whey protein
 📝 Catatan Pelatih:
 "Pemain dengan posturmu sering sukses sebagai ball-playing defender. 
 Latihan ekstra: 30 menit passing setiap sore ala David Alaba";
-};
-
-const generateWeeklyTrainingResponse = (input: string) => {
-  return Terima kasih! 🗓️
 
 📆 Jadwal Latihan Minggu Ini:
 
