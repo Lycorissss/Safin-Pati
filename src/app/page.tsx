@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { ArrowUp, Paperclip, X } from 'lucide-react';
+import Image from "next/image";
 
 interface Message {
   id: number;
@@ -44,10 +45,10 @@ export default function CoachChat() {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkIfMobile();
     window.addEventListener('resize', checkIfMobile);
-    
+
     return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
 
@@ -65,7 +66,7 @@ export default function CoachChat() {
     const file = e.target.files?.[0];
     if (file) {
       setAttachment(file);
-      
+
       if (file.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = () => {
@@ -94,202 +95,204 @@ export default function CoachChat() {
   };
 
   // Mobile view - shows welcome screen first
-if (isMobile && !hasStartedChat) {
-  return (
-    <div className="flex flex-col h-screen bg-gray-50 font-sans">
-      <div className="bg-white shadow-sm border-b border-gray-100 px-6 py-4">
-        <h1 className="text-xl text-gray-900 text-center">
-          Tanya Coach Sekarang!
-        </h1>
-      </div>
+  if (isMobile && !hasStartedChat) {
+    return (
+      <div className="flex flex-col h-screen bg-gray-50 font-sans">
+        <div className="bg-white shadow-sm border-b border-gray-100 px-6 py-4">
+          <h1 className="text-xl text-gray-900 text-center">
+            Tanya Coach Sekarang!
+          </h1>
+        </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
-        <div className="w-full max-w-md mb-8 px-4 text-center">
-          <div className="flex justify-center mb-4">
-            <img
-              src="/Icon_People.png"
-              alt="People Icon"
-              loading="lazy"
-              className="w-16 h-16 object-contain"
-            />
+        <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
+          <div className="w-full max-w-md mb-8 px-4 text-center">
+            <div className="flex justify-center mb-4">
+              <Image
+                src="/icon.png"
+                alt="People Icon"
+                width={64} // setara dengan w-16 (16 * 4px)
+                height={64} // setara dengan h-16 (16 * 4px)
+                className="object-contain"
+                loading="lazy"
+              />
+            </div>
+
+            <p className="text-gray-600 mb-6">
+              Halo, senang bertemu denganmu! Pilih opsi dibawah untuk memulai sesi bersama Coach:
+            </p>
+
+            <div className="space-y-3 mb-6 w-full max-w-xs mx-auto">
+              {/* Option 1: Start Training */}
+              <button
+                onClick={() => {
+                  setHasStartedChat(true);
+                  setChatBackground('white');
+                  setMessages([{
+                    id: Date.now(),
+                    text: "Siap! Sebelum aku susun latihan khusus buat kamu, aku perlu beberapa data dulu ya:\n\n🧍 Nama lengkap:\n📍 Tempat & tanggal lahir:\n⚖️ Berat badan (kg):\n📏 Tinggi badan (cm):",
+                    isCoach: true,
+                    time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+                  }]);
+                }}
+                className="w-full bg-white hover:bg-gray-50 border border-gray-200 text-gray-800 font-medium py-3 px-6 rounded-full transition-colors duration-200"
+              >
+                1. Kita mulai latihan
+              </button>
+
+              {/* Option 2: Weekly Training Target */}
+              <button
+                onClick={() => {
+                  setHasStartedChat(true);
+                  setChatBackground('white');
+                  setMessages([{
+                    id: Date.now(),
+                    text: "Aku akan buatkan latihan mingguan untukmu. Tolong beri data dasar dulu:\n\n🧍 Nama lengkap:\n📍 Tempat & tanggal lahir:\n⚖️ Berat badan (kg):\n📏 Tinggi badan (cm):",
+                    isCoach: true,
+                    time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+                  }]);
+                }}
+                className="w-full bg-white hover:bg-gray-50 border border-gray-200 text-gray-800 font-medium py-3 px-6 rounded-full transition-colors duration-200"
+              >
+                2. Kamu mau latihan target mingguan
+              </button>
+
+              {/* Option 3: Venting */}
+              <button
+                onClick={() => {
+                  setHasStartedChat(true);
+                  setChatBackground('white');
+                  setMessages([{
+                    id: Date.now(),
+                    text: "Silakan ceritakan apa yang sedang kamu rasakan...",
+                    isCoach: true,
+                    time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+                  }]);
+                }}
+                className="w-full bg-white hover:bg-gray-50 border border-gray-200 text-gray-800 font-medium py-3 px-6 rounded-full transition-colors duration-200"
+              >
+                3. Curhat dulu
+              </button>
+            </div>
+
+            <button
+              onClick={() => setHasStartedChat(true)}
+              className="w-full max-w-xs mx-auto bg-[#FFB20E] hover:bg-[#e6a00c] text-black font-medium py-3 px-6 rounded-full transition-colors duration-200"
+            >
+              Mulai Chat
+            </button>
           </div>
-
-          <p className="text-gray-600 mb-6">
-            Halo, senang bertemu denganmu! Pilih opsi dibawah untuk memulai sesi bersama Coach:
-          </p>
-
-          <div className="space-y-3 mb-6 w-full max-w-xs mx-auto">
-            {/* Option 1: Start Training */}
-            <button
-              onClick={() => {
-                setHasStartedChat(true);
-                setChatBackground('white');
-                setMessages([{
-                  id: Date.now(),
-                  text: "Siap! Sebelum aku susun latihan khusus buat kamu, aku perlu beberapa data dulu ya:\n\n🧍 Nama lengkap:\n📍 Tempat & tanggal lahir:\n⚖️ Berat badan (kg):\n📏 Tinggi badan (cm):",
-                  isCoach: true,
-                  time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-                }]);
-              }}
-              className="w-full bg-white hover:bg-gray-50 border border-gray-200 text-gray-800 font-medium py-3 px-6 rounded-full transition-colors duration-200"
-            >
-              1. Kita mulai latihan
-            </button>
-
-            {/* Option 2: Weekly Training Target */}
-            <button
-              onClick={() => {
-                setHasStartedChat(true);
-                setChatBackground('white');
-                setMessages([{
-                  id: Date.now(),
-                  text: "Aku akan buatkan latihan mingguan untukmu. Tolong beri data dasar dulu:\n\n🧍 Nama lengkap:\n📍 Tempat & tanggal lahir:\n⚖️ Berat badan (kg):\n📏 Tinggi badan (cm):",
-                  isCoach: true,
-                  time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-                }]);
-              }}
-              className="w-full bg-white hover:bg-gray-50 border border-gray-200 text-gray-800 font-medium py-3 px-6 rounded-full transition-colors duration-200"
-            >
-              2. Kamu mau latihan target mingguan
-            </button>
-
-            {/* Option 3: Venting */}
-            <button
-              onClick={() => {
-                setHasStartedChat(true);
-                setChatBackground('white');
-                setMessages([{
-                  id: Date.now(),
-                  text: "Silakan ceritakan apa yang sedang kamu rasakan...",
-                  isCoach: true,
-                  time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-                }]);
-              }}
-              className="w-full bg-white hover:bg-gray-50 border border-gray-200 text-gray-800 font-medium py-3 px-6 rounded-full transition-colors duration-200"
-            >
-              3. Curhat dulu
-            </button>
-          </div>
-
-          <button
-            onClick={() => setHasStartedChat(true)}
-            className="w-full max-w-xs mx-auto bg-[#FFB20E] hover:bg-[#e6a00c] text-black font-medium py-3 px-6 rounded-full transition-colors duration-200"
-          >
-            Mulai Chat
-          </button>
         </div>
       </div>
-    </div>
-  );
-}
-
-const handleSendMessage = () => {
-  if (inputMessage.trim() || attachment) {
-    // Add user message
-    const userMessage: Message = {
-      id: Date.now(),
-      text: inputMessage,
-      isCoach: false,
-      time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
-      ...(attachment && {
-        attachment: {
-          name: attachment.name,
-          size: attachment.size,
-          type: attachment.type
-        }
-      })
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    setInputMessage("");
-    setAttachment(null);
-    setAttachmentPreview(null);
-    setHasStartedChat(true);
-
-    // Generate coach response
-    setTimeout(() => {
-      // Check if we should respond based on last coach message
-      if (messages.length > 0) {
-        const lastCoachMessage = messages[messages.length - 1];
-        
-        if (lastCoachMessage.isCoach) {
-          let coachResponse: Message;
-          
-          if (lastCoachMessage.text.includes("data dulu ya")) {
-            // Response for training start
-            coachResponse = {
-              id: Date.now() + 1,
-              text: generateTrainingResponse(inputMessage),
-              isCoach: true,
-              time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-            };
-          } 
-          else if (lastCoachMessage.text.includes("latihan mingguan")) {
-            // Response for weekly training
-            coachResponse = {
-              id: Date.now() + 1,
-              text: generateWeeklyTrainingResponse(inputMessage),
-              isCoach: true,
-              time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-            };
-          }
-          else if (lastCoachMessage.text.includes("sedang kamu rasakan")) {
-            // Response for venting
-            coachResponse = {
-              id: Date.now() + 1,
-              text: generateVentingResponse(inputMessage),
-              isCoach: true,
-              time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-            };
-          } else {
-            // Default to random sports question
-            const unansweredQuestions = sportsQuestions.filter(q => 
-              !messages.some(m => m.text === q)
-            );
-            
-            const availableQuestions = unansweredQuestions.length > 0 
-              ? unansweredQuestions 
-              : sportsQuestions;
-            
-            const randomIndex = Math.floor(Math.random() * availableQuestions.length);
-            coachResponse = {
-              id: Date.now() + 1,
-              text: availableQuestions[randomIndex],
-              isCoach: true,
-              time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-            };
-          }
-
-          setMessages(prev => [...prev, coachResponse]);
-          return;
-        }
-      }
-
-      // Fallback to random sports question if no specific context
-      const unansweredQuestions = sportsQuestions.filter(q => 
-        !messages.some(m => m.text === q)
-      );
-      
-      const availableQuestions = unansweredQuestions.length > 0 
-        ? unansweredQuestions 
-        : sportsQuestions;
-      
-      const randomIndex = Math.floor(Math.random() * availableQuestions.length);
-      const coachResponse: Message = {
-        id: Date.now() + 1,
-        text: availableQuestions[randomIndex],
-        isCoach: true,
-        time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-      };
-      setMessages(prev => [...prev, coachResponse]);
-    }, 1500);
+    );
   }
-};
 
-// Helper functions for generating responses
-const generateTrainingResponse = (input: string) => {
-  const name = input.split('\n')[0] || 'Teman';
-  return `Terima kasih, Jono 🙌
+  const handleSendMessage = () => {
+    if (inputMessage.trim() || attachment) {
+      // Add user message
+      const userMessage: Message = {
+        id: Date.now(),
+        text: inputMessage,
+        isCoach: false,
+        time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
+        ...(attachment && {
+          attachment: {
+            name: attachment.name,
+            size: attachment.size,
+            type: attachment.type
+          }
+        })
+      };
+
+      setMessages(prev => [...prev, userMessage]);
+      setInputMessage("");
+      setAttachment(null);
+      setAttachmentPreview(null);
+      setHasStartedChat(true);
+
+      // Generate coach response
+      setTimeout(() => {
+        // Check if we should respond based on last coach message
+        if (messages.length > 0) {
+          const lastCoachMessage = messages[messages.length - 1];
+
+          if (lastCoachMessage.isCoach) {
+            let coachResponse: Message;
+
+            if (lastCoachMessage.text.includes("data dulu ya")) {
+              // Response for training start
+              coachResponse = {
+                id: Date.now() + 1,
+                text: generateTrainingResponse(inputMessage),
+                isCoach: true,
+                time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+              };
+            }
+            else if (lastCoachMessage.text.includes("latihan mingguan")) {
+              // Response for weekly training
+              coachResponse = {
+                id: Date.now() + 1,
+                text: generateWeeklyTrainingResponse(inputMessage),
+                isCoach: true,
+                time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+              };
+            }
+            else if (lastCoachMessage.text.includes("sedang kamu rasakan")) {
+              // Response for venting
+              coachResponse = {
+                id: Date.now() + 1,
+                text: generateVentingResponse(inputMessage),
+                isCoach: true,
+                time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+              };
+            } else {
+              // Default to random sports question
+              const unansweredQuestions = sportsQuestions.filter(q =>
+                !messages.some(m => m.text === q)
+              );
+
+              const availableQuestions = unansweredQuestions.length > 0
+                ? unansweredQuestions
+                : sportsQuestions;
+
+              const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+              coachResponse = {
+                id: Date.now() + 1,
+                text: availableQuestions[randomIndex],
+                isCoach: true,
+                time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+              };
+            }
+
+            setMessages(prev => [...prev, coachResponse]);
+            return;
+          }
+        }
+
+        // Fallback to random sports question if no specific context
+        const unansweredQuestions = sportsQuestions.filter(q =>
+          !messages.some(m => m.text === q)
+        );
+
+        const availableQuestions = unansweredQuestions.length > 0
+          ? unansweredQuestions
+          : sportsQuestions;
+
+        const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+        const coachResponse: Message = {
+          id: Date.now() + 1,
+          text: availableQuestions[randomIndex],
+          isCoach: true,
+          time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+        };
+        setMessages(prev => [...prev, coachResponse]);
+      }, 1500);
+    }
+  };
+
+  // Helper functions for generating responses
+  const generateTrainingResponse = (input: string) => {
+    const name = input.split('\n')[0] || 'Teman';
+    return `Terima kasih, Jono 🙌
 
 📋 Profil Latihan Kamu:
 • Usia: 21 tahun (Prime Development Age)
@@ -356,10 +359,10 @@ Kamis: Skema Serangan
 Jumat: Video Analysis
 Sabtu: Game Simulation
 Minggu: Refleksi & Recovery`;
-};
+  };
 
-const generateWeeklyTrainingResponse = (input: string) => {
-  return `📅 PROGRAM MINGGUAN JONO (U-21 High Performance)
+  const generateWeeklyTrainingResponse = (input: string) => {
+    return `📅 PROGRAM MINGGUAN JONO (U-21 High Performance)
 
 🔬 Berdasarkan data:
 • TB: 190cm | BB: 70kg
@@ -414,10 +417,10 @@ const generateWeeklyTrainingResponse = (input: string) => {
 💡 SPECIAL NOTE:
 "Pemain dengan posturmu butuh 8-12 minggu untuk adaptasi penuh ke level profesional. 
 Fokus pada konsistensi!"`;
-};
+  };
 
-const generateVentingResponse = (input: string) => {
-  return `Aku dengar semua keluh kesahmu... 💛
+  const generateVentingResponse = (input: string) => {
+    return `Aku dengar semua keluh kesahmu... 💛
 
 Tahu nggak? Kisahmu mengingatkanku pada banyak pemain hebat:
 
@@ -443,138 +446,138 @@ Yang membuat mereka berbeda:
 Yang penting tetap jalan, meski pelan."
 
 Aku akan selalu disini untuk membantumu berkembang, Jono!`;
-};
+  };
 
   // Web view - shows centered input when no messages
   if (!isMobile && messages.length === 0) {
-  return (
-    <div className="flex flex-col h-screen bg-gray-50 font-sans">
-      <div className="bg-white shadow-sm border-b border-gray-100 px-6 py-4">
-        <h1 className="text-xl text-gray-900 text-center">
-          Tanya Coach Sekarang!
-        </h1>
-      </div>
+    return (
+      <div className="flex flex-col h-screen bg-gray-50 font-sans">
+        <div className="bg-white shadow-sm border-b border-gray-100 px-6 py-4">
+          <h1 className="text-xl text-gray-900 text-center">
+            Tanya Coach Sekarang!
+          </h1>
+        </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center px-8">
-        <div className="w-full max-w-2xl">
-          <div className="text-center mb-8">
-            <h2 className="text-lg font-medium text-gray-800">
-              Apa yang bisa ku bantu hari ini?
-            </h2>
-          </div>
+        <div className="flex-1 flex flex-col items-center justify-center px-8">
+          <div className="w-full max-w-2xl">
+            <div className="text-center mb-8">
+              <h2 className="text-lg font-medium text-gray-800">
+                Apa yang bisa ku bantu hari ini?
+              </h2>
+            </div>
 
-          {/* 3 tombol opsi di atas input */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
-            <button
-              onClick={() => {
-                setHasStartedChat(true);
-                setChatBackground('white');
-                setMessages([{
-                  id: Date.now(),
-                  text: "Siap! Sebelum aku susun latihan khusus buat kamu, aku perlu beberapa data dulu ya:\n\n🧍 Nama lengkap:\n📍 Tempat & tanggal lahir:\n⚖️ Berat badan (kg):\n📏 Tinggi badan (cm):",
-                  isCoach: true,
-                  time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-                }]);
-              }}
-              className="bg-white hover:bg-gray-100 border border-gray-200 text-gray-800 font-medium py-2 px-4 rounded-full transition-colors duration-200"
-            >
-              1. Kita mulai latihan
-            </button>
-
-            <button
-              onClick={() => {
-                setHasStartedChat(true);
-                setChatBackground('white');
-                setMessages([{
-                  id: Date.now(),
-                  text: "Aku akan buatkan latihan mingguan untukmu. Tolong beri data dasar dulu:\n\n🧍 Nama lengkap:\n📍 Tempat & tanggal lahir:\n⚖️ Berat badan (kg):\n📏 Tinggi badan (cm):",
-                  isCoach: true,
-                  time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-                }]);
-              }}
-              className="bg-white hover:bg-gray-100 border border-gray-200 text-gray-800 font-medium py-2 px-4 rounded-full transition-colors duration-200"
-            >
-              2. Target mingguan
-            </button>
-
-            <button
-              onClick={() => {
-                setHasStartedChat(true);
-                setChatBackground('white');
-                setMessages([{
-                  id: Date.now(),
-                  text: "Silakan ceritakan apa yang sedang kamu rasakan...",
-                  isCoach: true,
-                  time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
-                }]);
-              }}
-              className="bg-white hover:bg-gray-100 border border-gray-200 text-gray-800 font-medium py-2 px-4 rounded-full transition-colors duration-200"
-            >
-              3. Curhat dulu
-            </button>
-          </div>
-
-          {attachmentPreview && (
-            <div className="mb-3 relative">
-              <div className="bg-gray-100 p-3 rounded-lg inline-block max-w-xs">
-                {attachmentPreview.startsWith('data:image') ? (
-                  <img 
-                    src={attachmentPreview} 
-                    alt="Preview" 
-                    className="max-h-40 rounded-md"
-                  />
-                ) : (
-                  <div className="flex items-center space-x-2">
-                    <Paperclip size={16} />
-                    <span className="truncate max-w-xs">{attachment?.name}</span>
-                  </div>
-                )}
-              </div>
-              <button 
-                onClick={removeAttachment}
-                className="absolute -top-2 -right-2 bg-gray-200 rounded-full p-1 hover:bg-gray-300"
+            {/* 3 tombol opsi di atas input */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+              <button
+                onClick={() => {
+                  setHasStartedChat(true);
+                  setChatBackground('white');
+                  setMessages([{
+                    id: Date.now(),
+                    text: "Siap! Sebelum aku susun latihan khusus buat kamu, aku perlu beberapa data dulu ya:\n\n🧍 Nama lengkap:\n📍 Tempat & tanggal lahir:\n⚖️ Berat badan (kg):\n📏 Tinggi badan (cm):",
+                    isCoach: true,
+                    time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+                  }]);
+                }}
+                className="bg-white hover:bg-gray-100 border border-gray-200 text-gray-800 font-medium py-2 px-4 rounded-full transition-colors duration-200"
               >
-                <X size={16} />
+                1. Kita mulai latihan
+              </button>
+
+              <button
+                onClick={() => {
+                  setHasStartedChat(true);
+                  setChatBackground('white');
+                  setMessages([{
+                    id: Date.now(),
+                    text: "Aku akan buatkan latihan mingguan untukmu. Tolong beri data dasar dulu:\n\n🧍 Nama lengkap:\n📍 Tempat & tanggal lahir:\n⚖️ Berat badan (kg):\n📏 Tinggi badan (cm):",
+                    isCoach: true,
+                    time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+                  }]);
+                }}
+                className="bg-white hover:bg-gray-100 border border-gray-200 text-gray-800 font-medium py-2 px-4 rounded-full transition-colors duration-200"
+              >
+                2. Target mingguan
+              </button>
+
+              <button
+                onClick={() => {
+                  setHasStartedChat(true);
+                  setChatBackground('white');
+                  setMessages([{
+                    id: Date.now(),
+                    text: "Silakan ceritakan apa yang sedang kamu rasakan...",
+                    isCoach: true,
+                    time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+                  }]);
+                }}
+                className="bg-white hover:bg-gray-100 border border-gray-200 text-gray-800 font-medium py-2 px-4 rounded-full transition-colors duration-200"
+              >
+                3. Curhat dulu
               </button>
             </div>
-          )}
 
-          {/* input chat tetap di bawah tombol */}
-          <div className="flex items-center space-x-2 bg-white border border-gray-200 rounded-full px-3">
-            <button 
-              onClick={() => fileInputRef.current?.click()}
-              className="text-gray-500 hover:text-gray-700 p-2"
-            >
-              <Paperclip size={20} />
+            {attachmentPreview && (
+              <div className="mb-3 relative">
+                <div className="bg-gray-100 p-3 rounded-lg inline-block max-w-xs">
+                  {attachmentPreview.startsWith('data:image') ? (
+                    <img
+                      src={attachmentPreview}
+                      alt="Preview"
+                      className="max-h-40 rounded-md"
+                    />
+                  ) : (
+                    <div className="flex items-center space-x-2">
+                      <Paperclip size={16} />
+                      <span className="truncate max-w-xs">{attachment?.name}</span>
+                    </div>
+                  )}
+                </div>
+                <button
+                  onClick={removeAttachment}
+                  className="absolute -top-2 -right-2 bg-gray-200 rounded-full p-1 hover:bg-gray-300"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            )}
+
+            {/* input chat tetap di bawah tombol */}
+            <div className="flex items-center space-x-2 bg-white border border-gray-200 rounded-full px-3">
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="text-gray-500 hover:text-gray-700 p-2"
+              >
+                <Paperclip size={20} />
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  className="hidden"
+                  accept="image/*,.pdf,.doc,.docx,.xls,.xlsx"
+                />
+              </button>
               <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                className="hidden"
-                accept="image/*,.pdf,.doc,.docx,.xls,.xlsx"
+                type="text"
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Message Coach..."
+                className="flex-1 py-3 px-2 focus:outline-none text-gray-800 placeholder-gray-500"
               />
-            </button>
-            <input
-              type="text"
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Message Coach..."
-              className="flex-1 py-3 px-2 focus:outline-none text-gray-800 placeholder-gray-500"
-            />
-            <button
-              onClick={handleSendMessage}
-              disabled={!inputMessage.trim() && !attachment}
-              className="bg-[#FFB20E] hover:bg-[#e6a00c] disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-full p-2 my-1 transition-colors duration-200"
-            >
-              <ArrowUp size={20} />
-            </button>
+              <button
+                onClick={handleSendMessage}
+                disabled={!inputMessage.trim() && !attachment}
+                className="bg-[#FFB20E] hover:bg-[#e6a00c] disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-full p-2 my-1 transition-colors duration-200"
+              >
+                <ArrowUp size={20} />
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   // Default chat view (after starting chat on mobile or after first message on web)
   return (
@@ -593,11 +596,10 @@ Aku akan selalu disini untuk membantumu berkembang, Jono!`;
               className={`flex ${message.isCoach ? 'justify-start' : 'justify-end'} px-4`}
             >
               <div
-                className={`max-w-[90%] px-4 py-3 rounded-2xl ${
-                  message.isCoach
+                className={`max-w-[90%] px-4 py-3 rounded-2xl ${message.isCoach
                     ? 'bg-white shadow-sm border border-gray-100 text-gray-800'
                     : 'bg-[#FFB20E] text-white'
-                }`}
+                  }`}
                 style={{ minWidth: '120px' }}
               >
                 {message.text && (
@@ -631,9 +633,9 @@ Aku akan selalu disini untuk membantumu berkembang, Jono!`;
           <div className="mb-3 relative">
             <div className="bg-gray-100 p-3 rounded-lg inline-block max-w-xs">
               {attachmentPreview.startsWith('data:image') ? (
-                <img 
-                  src={attachmentPreview} 
-                  alt="Preview" 
+                <img
+                  src={attachmentPreview}
+                  alt="Preview"
                   className="max-h-40 rounded-md"
                 />
               ) : (
@@ -643,7 +645,7 @@ Aku akan selalu disini untuk membantumu berkembang, Jono!`;
                 </div>
               )}
             </div>
-            <button 
+            <button
               onClick={removeAttachment}
               className="absolute -top-2 -right-2 bg-gray-200 rounded-full p-1 hover:bg-gray-300"
             >
@@ -652,7 +654,7 @@ Aku akan selalu disini untuk membantumu berkembang, Jono!`;
           </div>
         )}
         <div className="flex items-center space-x-2 bg-gray-50 border border-gray-200 rounded-full px-3">
-          <button 
+          <button
             onClick={() => fileInputRef.current?.click()}
             className="text-gray-500 hover:text-gray-700 p-2"
           >
